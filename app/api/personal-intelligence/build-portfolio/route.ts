@@ -56,7 +56,8 @@ export async function POST() {
       (existingPage as any).portfolio_page.sections.length > 0;
     if (!hasPortfolio) {
       try {
-        const cookieHeader = cookies()
+        const cookieStore = await cookies();
+        const cookieHeader = cookieStore
           .getAll()
           .map((c) => `${c.name}=${c.value}`)
           .join("; ");
@@ -156,7 +157,8 @@ export async function POST() {
   // tokens AND override any manual edits the user made via the editor.
   if (!hasPortfolio) {
     try {
-      const cookieHeader = cookies()
+      const cookieStore = await cookies();
+      const cookieHeader = cookieStore
         .getAll()
         .map((c) => `${c.name}=${c.value}`)
         .join("; ");

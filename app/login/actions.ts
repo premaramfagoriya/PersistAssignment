@@ -89,35 +89,30 @@ export async function signUpWithPassword(formData: FormData) {
   }
 
   const supabase = createClient();
+  
+  // Normal sign-up respects the "Confirm email" setting in Supabase Auth config
+  // and actually sends the confirmation email rather than bypassing it via admin.
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: { emailRedirectTo: callbackUrl(formData) }
   });
 
-  // ── Existing-account recovery (task #328) ─────────────────────────────────
-  // A returning user who tries "Create account" with an email that already
-  // exists used to get trapped. Supabase signals the collision two different
-  // ways depending on the "Confirm email" setting:
-  //   1. Confirm-email OFF → signUp returns an error whose message contains
-  //      "already registered". Old code dumped that raw string as a dead-end.
-  //   2. Confirm-email ON (enumeration protection) → signUp returns NO error
-  //      and NO session, with an obfuscated user whose `identities` array is
-  //      empty. Old code said "check your inbox" for a mail that never came.
-  // In BOTH cases, recover the user instead of stranding them: fire a magic
-  // sign-in link to the existing address and route to a clear, actionable
-  // state. (signInWithOtp delivers to existing users without leaking
-  // existence, so this is safe under enumeration protection too.)
   const existsByError =
-    !!error && /already (been )?registered|already exists/i.test(error.message);
-  const existsBySilence =
-    !error &&
-    !data.session &&
-    !!data.user &&
-    (data.user.identities?.length ?? 0) === 0;
+    (!!error && /already (been )?registered|already exists/i.test(error.message)) ||
+    (data?.user && data.user.identities && data.user.identities.length === 0);
 
-  if (existsByError || existsBySilence) {
-    // Best-effort recovery link — ignore its result so we never dead-end.
+  if (existsByError) {
+    // Just try signing them in if they already exist to save them from being trapped
+    const { error: signInErr } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    if (!signInErr) {
+       redirect(nextFromForm(formData));
+    }
+    
+    // Fall back to old behavior if password is wrong
     await supabase.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: callbackUrl(formData) }
@@ -129,10 +124,14 @@ export async function signUpWithPassword(formData: FormData) {
     const detail = encodeURIComponent(error.message);
     redirect(`/login?error=password_failed&detail=${detail}`);
   }
-  // If a session came back immediately, email confirmation is off — go in.
-  if (data.session) redirect(nextFromForm(formData));
-  // Otherwise they need to confirm via email first.
-  redirect("/login?sent=1");
+
+  // Tell the user to check their inbox if confirmation is required
+  if (data.session === null) {
+    redirect("/login?sent=1");
+  }
+
+  // If email confirmation is off, sign them in directly
+  redirect(nextFromForm(formData));
 }
 
 // ── OAuth (Google / Apple) ────────────────────────────────────────────────

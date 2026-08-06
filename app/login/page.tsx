@@ -59,18 +59,17 @@ function AppleLogo() {
   );
 }
 
-export default async function LoginPage({
-  searchParams
-}: {
-  searchParams: {
+export default async function LoginPage(props: {
+  searchParams: Promise<{
     sent?: string;
     error?: string;
     detail?: string;
     invite?: string;
     conference?: string;
     exists?: string;
-  };
+  }>;
 }) {
+  const searchParams = await props.searchParams;
   const sent = searchParams.sent === "1";
   const exists = searchParams.exists === "1";
   const detail = searchParams.detail

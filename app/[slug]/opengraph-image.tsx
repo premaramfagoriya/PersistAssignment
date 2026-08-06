@@ -55,9 +55,10 @@ const buildInviteCopy = _buildInviteCopy;
 export default async function InviteOgImage({
   params
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const slug = (params.slug || "").toLowerCase();
+  const { slug = "" } = await params;
+  const normalizedSlug = slug.toLowerCase();
   const SITE_URL =
     process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ||
     "https://syncedin.org";
@@ -68,7 +69,7 @@ export default async function InviteOgImage({
   let recipientAvatar: string | null = null;
   let inviterAvatar: string | null = null;
   let starter: string = "";
-  if (!RESERVED.has(slug)) {
+  if (!RESERVED.has(normalizedSlug)) {
     try {
       const service = createServiceClient();
       const { data: invite } = await service
@@ -76,7 +77,7 @@ export default async function InviteOgImage({
         .select(
           "inviter_user_id, person_title, recipient_avatar_url, conversation_starter, outbound_message"
         )
-        .eq("slug", slug)
+        .eq("slug", normalizedSlug)
         .maybeSingle();
       if (invite) {
         personName = shortName(invite.person_title ?? "you");

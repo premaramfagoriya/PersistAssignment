@@ -37,17 +37,18 @@ const RESERVED = new Set([
 export async function generateMetadata({
   params
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const slug = (params.slug || "").toLowerCase();
-  if (!slug || RESERVED.has(slug)) {
+  const { slug = "" } = await params;
+  const normalizedSlug = slug.toLowerCase();
+  if (!normalizedSlug || RESERVED.has(normalizedSlug)) {
     return {};
   }
   const service = createServiceClient();
   const { data: invite } = await service
     .from("pending_invites")
     .select("inviter_user_id, person_title")
-    .eq("slug", slug)
+    .eq("slug", normalizedSlug)
     .maybeSingle();
   if (!invite) {
     return {};
@@ -94,7 +95,7 @@ export async function generateMetadata({
   // the auto-detected image into our manual object — leaving the link
   // preview blank (what Jack reported). Explicit url + width/height +
   // alt fixes both iMessage and Twitter / LinkedIn / Slack scrapers.
-  const ogUrl = `${appUrl}/${slug}/opengraph-image`;
+  const ogUrl = `${appUrl}/${normalizedSlug}/opengraph-image`;
   return {
     title,
     description,
@@ -125,10 +126,11 @@ export async function generateMetadata({
 export default async function InviteLandingPage({
   params
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const slug = (params.slug || "").toLowerCase();
-  if (!slug || RESERVED.has(slug)) {
+  const { slug = "" } = await params;
+  const normalizedSlug = slug.toLowerCase();
+  if (!normalizedSlug || RESERVED.has(normalizedSlug)) {
     notFound();
   }
 
@@ -136,7 +138,7 @@ export default async function InviteLandingPage({
   const { data: invite } = await service
     .from("pending_invites")
     .select("*")
-    .eq("slug", slug)
+    .eq("slug", normalizedSlug)
     .maybeSingle();
 
   if (!invite) {
@@ -156,7 +158,7 @@ export default async function InviteLandingPage({
           first_visit_at:
             (invite as any).first_visit_at ?? new Date().toISOString()
         })
-        .eq("slug", slug);
+        .eq("slug", normalizedSlug);
     } catch {
       /* migration not yet applied — skip silently */
     }

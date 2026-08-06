@@ -19,7 +19,7 @@ export default async function ConversationPage({
   searchParams
 }: {
   params: { id: string };
-  searchParams?: { first_match?: string };
+  searchParams?: { first_match?: string; draft?: string };
 }) {
   // #185 — set when the user lands here straight from onboarding via
   // the auto-matchmaker. We render a "this is your first match" banner
@@ -524,6 +524,7 @@ export default async function ConversationPage({
           ? { response: otherResponse.response, reason: otherResponse.reason }
           : null
       }
+      initialDraft={searchParams?.draft}
     />
     </>
   );

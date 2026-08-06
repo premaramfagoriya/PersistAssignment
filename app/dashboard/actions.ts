@@ -144,5 +144,10 @@ export async function startConversationWithUser(formData: FormData) {
     participantA: user.id,
     participantB: otherId
   }).catch((e) => console.warn("[start-conv] notify failed", e));
-  redirect(`/conversations/${conv.id}`);
+  
+  const draft = String(formData.get("draft") ?? "").trim();
+  const url = draft 
+    ? `/conversations/${conv.id}?draft=${encodeURIComponent(draft)}`
+    : `/conversations/${conv.id}`;
+  redirect(url);
 }

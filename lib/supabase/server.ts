@@ -7,17 +7,18 @@ type CookieToSet = { name: string; value: string; options?: CookieOptions };
 // Use this in Server Components, Server Actions, Route Handlers, and Middleware.
 // It reads/writes cookies so the user's session is preserved.
 export function createClient() {
-  const cookieStore = cookies();
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() {
+        async getAll() {
+          const cookieStore = await cookies();
           return cookieStore.getAll();
         },
-        setAll(cookiesToSet: CookieToSet[]) {
+        async setAll(cookiesToSet: CookieToSet[]) {
           try {
+            const cookieStore = await cookies();
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             );

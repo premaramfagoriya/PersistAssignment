@@ -6,14 +6,16 @@ An agent-to-agent protocol between people. Each user builds a digital twin from 
 - Next.js 14 (App Router, TypeScript, server actions, server components)
 - Tailwind CSS
 - Supabase (Postgres + magic-link auth + row-level security)
-- Anthropic Claude API (twin generation)
+- Anthropic Claude API (twin generation & synergy analysis)
 - PWA-installable on iOS and Android day one
 
 ## What's in v1
 - Universal onboarding — any email can sign up via magic link
+- **Email Confirmation System** — Robust signup process utilizing Supabase's native email confirmation flow (no bypasses, strict verification).
 - Rich twin profile intake with collapsible extraction guides for ChatGPT/Claude/Gemini, WhatsApp, iMessage, Telegram, LinkedIn, and sent email
 - Live "data richness" indicator that tells the user how much fidelity they've fed the twin
 - Sample twins (test personas) — solo test mode with 5 pre-built twins (Seed VC, technical co-founder, B2B partnerships, recruiter, angel) that auto-reply so any new user can validate their twin without needing a partner
+- **Twin Radar & Match Reasoning** — Automatic matching surface that calculates synergy scores and provides AI-generated reasoning on exactly why two profiles should connect.
 - Manual pairing for real users — start a conversation by entering another SyncedIn user's email
 - Two-twin chat surface with generate / edit / regenerate / send
 - Edit-delta logging — the proprietary training corpus that compounds per user
@@ -21,7 +23,6 @@ An agent-to-agent protocol between people. Each user builds a digital twin from 
 - PWA installable for iOS/Android
 
 ## What's not in v1 (intentional)
-- Automatic matching / "highest win-win" surfacing across the network
 - Contract drafting
 - Native iOS/Android shells (PWA covers it for now)
 - Real-time push (refresh-based)
@@ -36,6 +37,7 @@ An agent-to-agent protocol between people. Each user builds a digital twin from 
 4. Authentication → URL Configuration:
    - Site URL: `http://localhost:3000` for dev; replace with your Vercel domain in prod
    - Additional Redirect URLs: `http://localhost:3000/auth/callback` and your prod equivalent
+   - Confirm Email: Make sure to toggle this on if you want users to verify their emails on signup.
 
 ### 2. Anthropic API key
 Get one at https://console.anthropic.com → API Keys.
@@ -91,11 +93,17 @@ Share the Vercel URL. Anyone can sign in with their own email, get a magic link,
 ## Testing the loop
 
 ### Solo (sample twins)
-1. Sign up with magic link.
+1. Sign up with magic link or via email/password.
 2. Complete onboarding (use the extraction guides — at minimum paste a ChatGPT/Claude context dump).
 3. Dashboard → click a sample twin (e.g. "Sam Chen — Seed VC").
 4. Hit Generate, edit the draft, send. The sample twin auto-replies.
 5. Repeat. Each edit logs an entry in `edit_deltas` — your meta-model corpus.
+
+### Twin Radar & Reasoning
+1. Open your Dashboard.
+2. Under Twin Radar Matches, find suggested pairs.
+3. Click "✨ Ask my twin why we should connect" to generate a live synergy analysis on why it's a good match.
+4. Instantly start a conversation with the reasoning pre-filled as a draft.
 
 ### Real two-twin (you + a friend)
 1. Both sign up + complete onboarding.
@@ -107,7 +115,7 @@ Share the Vercel URL. Anyone can sign in with their own email, get a magic link,
 ```
 app/
   page.tsx                                 Landing
-  login/                                   Magic-link sign-in
+  login/                                   Magic-link & Password sign-in
   auth/callback/                           Session exchange
   onboarding/
     page.tsx                               Twin profile intake (server)
@@ -117,6 +125,7 @@ app/
   dashboard/
     page.tsx                               Real + test conversations, sample twins
     actions.ts                             Start a test conversation
+    TwinRadar.tsx                          Synergy match analysis & reasoning
   conversations/
     new/                                   Start a conversation by email
     [id]/
@@ -128,10 +137,11 @@ app/
     regenerate-message/                    Re-draft using user's edit as signal
     send-message/                          Commit message + log delta if edited
     generate-dummy-reply/                  Generate + auto-insert as a test persona
+    twin/match-reasoning/                  Analyze why two profiles align
 
 lib/
   supabase/{client,server}.ts              Auth + service clients
-  anthropic.ts                             SDK + model id
+  anthropic.ts                             SDK + model id + retry logic
   twin-prompt.ts                           System prompt builder (CORE IP)
   types.ts                                 Shared types
 
@@ -156,7 +166,6 @@ The corpus is RLS-scoped per user. *Cross-user* patterns — what consensus-prod
 ## Next things to build (priority order)
 
 1. **Realtime updates** in the conversation view (Supabase Realtime subscription).
-2. **Match suggestions** — when two twins have compatible deal preferences, surface a suggested intro to both users for one-click acceptance. This is the "highest win-win" feature.
-3. **Consensus detection + contract drafting** — when the conversation reaches a deal shape, generate the term sheet / SAFE / MOU draft and stage it for both sides to approve.
-4. **Auto-enrich twin from connected sources** (LinkedIn OAuth, calendar, Notion, Gmail) to skip the manual paste.
-5. **Capacitor wrap** for App Store + Play Store distribution.
+2. **Consensus detection + contract drafting** — when the conversation reaches a deal shape, generate the term sheet / SAFE / MOU draft and stage it for both sides to approve.
+3. **Auto-enrich twin from connected sources** (LinkedIn OAuth, calendar, Notion, Gmail) to skip the manual paste.
+4. **Capacitor wrap** for App Store + Play Store distribution.

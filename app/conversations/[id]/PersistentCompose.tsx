@@ -22,7 +22,8 @@ import { MicButton } from "../../MicButton";
 export function PersistentCompose({
   conversationId,
   onSent,
-  onContinueLoop
+  onContinueLoop,
+  initialDraft
 }: {
   conversationId: string;
   onSent: (m: Message) => void;
@@ -30,8 +31,9 @@ export function PersistentCompose({
    *  typing anything — same as the old "continue" button. Triggers a
    *  twin-side turn instead of a human message. */
   onContinueLoop: () => void;
+  initialDraft?: string;
 }) {
-  const [text, setText] = useState("");
+  const [text, setText] = useState(initialDraft ?? "");
   const [sending, setSending] = useState(false);
   const [drafting, setDrafting] = useState(false);
   const [uploading, setUploading] = useState(false);

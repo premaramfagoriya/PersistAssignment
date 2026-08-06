@@ -18,6 +18,7 @@ import { ClientDate } from "../ClientDate";
 import { computePairScore } from "@/lib/pair-score";
 import { QuickFeedbackWidget } from "./QuickFeedbackWidget";
 import { PremiumProgressCard } from "./PremiumProgressCard";
+import { TwinRadar } from "./TwinRadar";
 import { ConversationsList, type ConversationRow } from "./ConversationsList";
 import { countCompletedReferrals } from "@/lib/invite-stats";
 import { computeSyncScore } from "@/lib/sync-score";
@@ -801,7 +802,11 @@ export default async function DashboardPage() {
                   gap: 14
                 }}
               >
-                {ccOpportunities.map((o) => (
+                {/* 1. Twin Radar match (Top match gets the AI treatment) */}
+                <TwinRadar match={ccOpportunities[0]} />
+                
+                {/* 2. Standard remaining opportunities */}
+                {ccOpportunities.slice(1).map((o) => (
                   <div
                     key={o.id}
                     className="retro-panel"

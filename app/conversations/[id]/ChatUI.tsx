@@ -816,7 +816,8 @@ export function ChatUI({
   initialMyResponse,
   initialOtherResponse,
   otherLastReadAt,
-  initialSummary = null
+  initialSummary = null,
+  initialDraft
 }: {
   conversationId: string;
   selfUserId: string;
@@ -855,6 +856,7 @@ export function ChatUI({
     counterpart_summary: string;
     excitement_score: number;
   } | null;
+  initialDraft?: string;
 }) {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [done, setDone] = useState(initialDone);
@@ -2158,6 +2160,7 @@ export function ChatUI({
           )}
           <PersistentCompose
             conversationId={conversationId}
+            initialDraft={initialDraft}
             onSent={(msg) => {
               setMessages((prev) => [...prev, msg]);
               setDone(false);
