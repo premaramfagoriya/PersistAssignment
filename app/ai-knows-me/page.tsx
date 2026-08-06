@@ -29,11 +29,12 @@ export const metadata: Metadata = {
   }
 };
 
-export default async function AiKnowsMePage({
-  searchParams
-}: {
-  searchParams?: { preview?: string };
-}) {
+export default async function AiKnowsMePage(
+  props: {
+    searchParams?: Promise<{ preview?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const supabase = createClient();
   const {
     data: { user }

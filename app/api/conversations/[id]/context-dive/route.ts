@@ -37,8 +37,9 @@ import { anthropic, TWIN_MODEL } from "@/lib/anthropic";
  */
 export async function GET(
   _req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const params = await context.params;
   const supabase = createClient();
   const {
     data: { user }
@@ -69,8 +70,9 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const params = await context.params;
   const supabase = createClient();
   const {
     data: { user }

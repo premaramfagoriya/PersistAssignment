@@ -16,7 +16,6 @@ const config: CapacitorConfig = {
   appId: "org.syncedin.app",
   appName: "SyncedIn",
   webDir: "public",
-  bundledWebRuntime: false,
   server: {
     url: "https://syncedin.org",
     cleartext: false,

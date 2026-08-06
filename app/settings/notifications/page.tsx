@@ -6,11 +6,12 @@ import { AppShell } from "../../AppShell";
 
 export const dynamic = "force-dynamic";
 
-export default async function NotificationSettingsPage({
-  searchParams
-}: {
-  searchParams: { saved?: string };
-}) {
+export default async function NotificationSettingsPage(
+  props: {
+    searchParams: Promise<{ saved?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const supabase = createClient();
   const {
     data: { user }

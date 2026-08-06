@@ -21,8 +21,9 @@ const AGREEMENT_MARKER = ">>> AGREEMENT:";
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const params = await context.params;
   const supabase = createClient();
   const {
     data: { user }

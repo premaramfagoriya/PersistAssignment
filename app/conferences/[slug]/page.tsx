@@ -27,11 +27,12 @@ import { deriveIceberg } from "@/lib/iceberg";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export async function generateMetadata({
-  params
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const slug = (params.slug || "").toLowerCase();
   if (!slug) return {};
   const service = createServiceClient();
@@ -53,13 +54,14 @@ export async function generateMetadata({
   };
 }
 
-export default async function ConferencePage({
-  params,
-  searchParams
-}: {
-  params: { slug: string };
-  searchParams: { created?: string };
-}) {
+export default async function ConferencePage(
+  props: {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ created?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const slug = (params.slug || "").toLowerCase();
   if (!slug) notFound();
 
@@ -394,7 +396,7 @@ export default async function ConferencePage({
           <div className="flex items-center gap-3 mt-3">
             {conf.logo_url && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img
+              (<img
                 src={conf.logo_url}
                 alt={`${conf.name} logo`}
                 width={56}
@@ -407,7 +409,7 @@ export default async function ConferencePage({
                   border: "1px solid var(--border)",
                   flex: "0 0 auto"
                 }}
-              />
+              />)
             )}
             <h1 className="retro-h1 text-4xl leading-tight min-w-0">
               {conf.name}
@@ -684,7 +686,6 @@ export default async function ConferencePage({
         totalCount={attendeeCount ?? 0}
         kindLabel={kindLabel}
       />
-
 
       {/* SHARE + QR — moved down the page (Jack: "the QR code can go
           below"). QR is a click/scan join target; stacks under the share

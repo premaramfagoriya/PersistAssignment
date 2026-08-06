@@ -13,11 +13,12 @@ import { pickBestFirstMatch } from "@/lib/matchmaking";
  */
 export const dynamic = "force-dynamic";
 
-export default async function TwinPage({
-  searchParams
-}: {
-  searchParams?: { welcome?: string };
-}) {
+export default async function TwinPage(
+  props: {
+    searchParams?: Promise<{ welcome?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const supabase = createClient();
   const {
     data: { user }

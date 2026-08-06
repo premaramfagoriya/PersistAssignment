@@ -6,10 +6,8 @@ import { createClient, createServiceClient } from "@/lib/supabase/server";
  *
  * Body: { response_id: string, text: string }
  */
-export async function POST(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function POST(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const supabase = createClient();
   const {
     data: { user }

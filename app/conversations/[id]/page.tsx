@@ -14,13 +14,14 @@ import Link from "next/link";
 import type { Message, AgreementResponse } from "@/lib/types";
 import { socialsFromBlob } from "@/lib/social-from-blob";
 
-export default async function ConversationPage({
-  params,
-  searchParams
-}: {
-  params: { id: string };
-  searchParams?: { first_match?: string; draft?: string };
-}) {
+export default async function ConversationPage(
+  props: {
+    params: Promise<{ id: string }>;
+    searchParams?: Promise<{ first_match?: string; draft?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   // #185 — set when the user lands here straight from onboarding via
   // the auto-matchmaker. We render a "this is your first match" banner
   // so the moment doesn't feel mysterious — they understand WHY this

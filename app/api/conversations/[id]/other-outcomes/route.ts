@@ -15,10 +15,8 @@ import { anthropic, TWIN_MODEL } from "@/lib/anthropic";
  */
 const AGREEMENT_MARKER = ">>> AGREEMENT:";
 
-export async function POST(
-  _req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function POST(_req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const supabase = createClient();
   const {
     data: { user }

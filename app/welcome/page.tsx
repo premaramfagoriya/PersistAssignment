@@ -24,11 +24,12 @@ export const dynamic = "force-dynamic";
  * The wizard is still available at /onboarding for users who want to
  * refine their twin. It's not the default path anymore.
  */
-export default async function WelcomePage({
-  searchParams
-}: {
-  searchParams: { conv?: string; from?: string };
-}) {
+export default async function WelcomePage(
+  props: {
+    searchParams: Promise<{ conv?: string; from?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const supabase = createClient();
   const {
     data: { user }
