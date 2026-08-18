@@ -640,438 +640,260 @@ export default async function DashboardPage() {
       {/* Scrolls to top when arriving with ?saved=1 (post-onboarding). */}
       <ScrollTopOnSaved />
 
-      <>
-        {/* COMMAND CENTER header + feed — Jack's rebrand. Real numbers only. */}
-        <section className="mt-2">
-          <div
-            style={{
-              fontSize: 12,
-              fontWeight: 800,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--amber-bright)"
-            }}
-          >
-            Command Center
-          </div>
-          <h1
-            className="retro-h1"
-            style={{ fontSize: 30, fontWeight: 850, letterSpacing: "-0.02em", marginTop: 4 }}
-          >
+      <div className="max-w-7xl mx-auto py-8">
+        {/* COMMAND CENTER top bar */}
+        <div className="mb-10">
+          <h1 className="text-3xl font-extrabold tracking-tight text-[var(--text)]">
             Good {greetPart}, {firstName}.
           </h1>
-          <p style={{ color: "var(--text-dim)", marginTop: 2, fontSize: 15 }}>
+          <p className="text-[var(--text-dim)] mt-1 text-[15px]">
             Your twin is scanning, prioritizing, and opening doors.
           </p>
 
-          <div
-            style={{
-              marginTop: 18,
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-              gap: 14
-            }}
-          >
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
             {commandFeed.map((c) => (
               <Link
                 key={c.label}
                 href={c.href}
-                className="retro-panel retro-panel-hover"
-                style={{
-                  padding: 16,
-                  textDecoration: "none",
-                  color: "var(--text)",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 10
-                }}
+                className="group relative overflow-hidden rounded-2xl bg-[var(--panel-solid)] border border-[var(--border-bright)] p-5 transition-all hover:border-[var(--amber)] hover:shadow-lg hover:shadow-indigo-500/10"
               >
-                <span
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 12,
-                    display: "inline-flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 20,
-                    background: `${c.tint}1f`
-                  }}
-                  aria-hidden
-                >
-                  {c.icon}
-                </span>
-                <div style={{ fontSize: 28, fontWeight: 850, lineHeight: 1 }}>
-                  {c.value}
-                </div>
-                <div style={{ fontSize: 13, color: "var(--text-dim)", fontWeight: 600 }}>
-                  {c.label}
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative flex flex-col gap-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl bg-[var(--panel-2)] border border-[var(--border-bright)] group-hover:bg-[var(--panel-solid)] transition-colors">
+                    {c.icon}
+                  </div>
+                  <div>
+                    <div className="text-2xl font-black text-[var(--text)] tracking-tight">
+                      {c.value}
+                    </div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-[var(--text-dim)] mt-1">
+                      {c.label}
+                    </div>
+                  </div>
                 </div>
               </Link>
             ))}
           </div>
+        </div>
 
-          {ccTop && (
-            <Link
-              href={`/conversations/${ccTop.id}`}
-              className="retro-panel retro-panel-hover"
-              style={{
-                display: "flex",
-                gap: 18,
-                alignItems: "center",
-                padding: 20,
-                marginTop: 14,
-                textDecoration: "none",
-                color: "var(--text)",
-                background:
-                  "linear-gradient(135deg, rgba(99,102,241,0.07), rgba(139,92,246,0.07))",
-                borderColor: "var(--amber)"
-              }}
-            >
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 800,
-                    letterSpacing: "0.14em",
-                    textTransform: "uppercase",
-                    color: "var(--amber-bright)",
-                    marginBottom: 6
-                  }}
+        {/* 2-COLUMN GRID */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+          
+          {/* MAIN COLUMN (Left - Span 2) */}
+          <div className="xl:col-span-2 space-y-10">
+            
+            {/* AI Recommendation */}
+            {ccTop && (
+              <section>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+                  <h2 className="text-xs font-bold uppercase tracking-widest text-[var(--amber-bright)]">Top Priority Recommendation</h2>
+                </div>
+                <Link
+                  href={`/conversations/${ccTop.id}`}
+                  className="group flex flex-col sm:flex-row gap-6 items-center p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-[var(--panel-solid)] border border-indigo-500/30 hover:border-indigo-400 transition-all shadow-xl shadow-indigo-500/5"
                 >
-                  ✦ AI recommendation · top priority
-                </div>
-                <div style={{ fontSize: 22, fontWeight: 850, letterSpacing: "-0.01em" }}>
-                  {ccTop.name}
-                </div>
-                <div
-                  style={{
-                    fontSize: 14,
-                    color: "var(--text-dim)",
-                    marginTop: 6,
-                    lineHeight: 1.45,
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden"
-                  }}
-                >
-                  {ccTop.summary ||
-                    "Your twin flagged this as your highest-leverage conversation. Open it and lock the next step."}
-                </div>
-                <div style={{ marginTop: 12, display: "inline-flex", gap: 16, fontSize: 13 }}>
-                  <span style={{ color: "var(--green)", fontWeight: 800 }}>
-                    {ccTop.sync}% fit
-                  </span>
-                  <span style={{ color: "var(--amber-bright)", fontWeight: 700 }}>
-                    Open conversation →
-                  </span>
-                </div>
-              </div>
-              <Avatar
-                id={ccTop.id}
-                name={ccTop.name}
-                avatarUrl={ccTop.avatar}
-                size={84}
-              />
-            </Link>
-          )}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xl sm:text-2xl font-bold tracking-tight mb-2 group-hover:text-indigo-400 transition-colors">
+                      {ccTop.name}
+                    </div>
+                    <div className="text-sm text-slate-300 leading-relaxed line-clamp-3">
+                      {ccTop.summary || "Your twin flagged this as your highest-leverage conversation. Open it and lock the next step."}
+                    </div>
+                    <div className="mt-6 flex items-center gap-4 text-sm font-semibold">
+                      <span className="flex items-center gap-1 text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full border border-emerald-400/20">
+                        <span className="text-emerald-500 text-lg leading-none">&bull;</span> {ccTop.sync}% Fit
+                      </span>
+                      <span className="text-indigo-400 group-hover:translate-x-1 transition-transform">
+                        Open Conversation &rarr;
+                      </span>
+                    </div>
+                  </div>
+                  <Avatar id={ccTop.id} name={ccTop.name} avatarUrl={ccTop.avatar} size={96} />
+                </Link>
+              </section>
+            )}
 
-          {/* TODAY'S OPPORTUNITIES — top real matches not yet in a
-              conversation. Real pair scores; one-tap "connect" via the
-              startConversationWithUser server action. */}
-          {ccOpportunities.length > 0 && (
-            <div style={{ marginTop: 26 }}>
-              <div
-                style={{
-                  fontSize: 12,
-                  fontWeight: 800,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  color: "var(--amber-bright)",
-                  marginBottom: 12
-                }}
-              >
-                Today's opportunities
-              </div>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns:
-                    "repeat(auto-fit, minmax(240px, 1fr))",
-                  gap: 14
-                }}
-              >
-                {/* 1. Twin Radar match (Top match gets the AI treatment) */}
-                <TwinRadar match={ccOpportunities[0]} />
+            {/* Active Conversations */}
+            {realConversations.length > 0 && (
+              <section>
+                <div className="mb-4">
+                  <h2 className="text-xl font-bold tracking-tight">Active Conversations</h2>
+                  <p className="text-sm text-[var(--text-dim)]">Ongoing deals and relationships.</p>
+                </div>
+                {(() => {
+                  const rows: ConversationRow[] = realConversations.map((c) => {
+                    const otherId =
+                      c.participant_a === user.id
+                        ? c.participant_b
+                        : c.participant_a;
+                    const otherTwin = (twinByUser.get(otherId) as any) ?? null;
+                    const sync_score = computePairScore(twin ?? {}, otherTwin ?? {});
+                    return {
+                      id: c.id,
+                      other_id: otherId,
+                      other_name: nameById.get(otherId) ?? "Unknown",
+                      other_avatar: avatarById.get(otherId) ?? null,
+                      other_socials: socialsById.get(otherId) ?? null,
+                      other_last_active_at: lastActiveById.get(otherId) ?? null,
+                      status: statusForConv(c),
+                      counterpart_summary: c.counterpart_summary ?? null,
+                      summary: c.summary ?? null,
+                      created_at: c.created_at,
+                      excitement_score: c.excitement_score ?? null,
+                      excitement_locked: c.excitement_locked ?? null,
+                      sync_score,
+                      sync_score_override: (c as any).sync_score_override ?? null,
+                      last_message_at: lastMsgByConv.get(c.id) ?? null
+                    };
+                  });
+                  return <ConversationsList rows={rows} />;
+                })()}
+              </section>
+            )}
+
+            {/* Today's Opportunities */}
+            {ccOpportunities.length > 0 && (
+              <section>
+                <div className="mb-4">
+                  <h2 className="text-xl font-bold tracking-tight">Today's Opportunities</h2>
+                  <p className="text-sm text-[var(--text-dim)]">Curated matches from the network.</p>
+                </div>
                 
-                {/* 2. Standard remaining opportunities */}
-                {ccOpportunities.slice(1).map((o) => (
-                  <div
-                    key={o.id}
-                    className="retro-panel"
-                    style={{
-                      padding: 16,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 12
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 12
-                      }}
-                    >
-                      <Avatar
-                        id={o.id}
-                        name={o.name}
-                        avatarUrl={o.avatar}
-                        size={44}
-                      />
-                      <div style={{ minWidth: 0, flex: 1 }}>
-                        <div
-                          style={{
-                            fontSize: 15,
-                            fontWeight: 800,
-                            letterSpacing: "-0.01em",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis"
-                          }}
-                        >
-                          {o.name}
-                        </div>
-                        <div
-                          style={{
-                            fontSize: 11,
-                            fontWeight: 800,
-                            color: o.tier.color,
-                            letterSpacing: "0.02em"
-                          }}
-                        >
-                          {o.score}% · {o.tier.label}
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 6, minHeight: 36 }}>
-                      {([
-                        { label: "About", value: o.about },
-                        { label: "Wants / needs", value: o.wants },
-                        { label: "Offers", value: o.offers }
-                      ] as { label: string; value: string | null }[])
-                        .filter((r) => r.value)
-                        .map((r) => (
-                          <div key={r.label}>
-                            <span
-                              style={{
-                                fontSize: 10,
-                                fontWeight: 800,
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase",
-                                color: "var(--text-dim)"
-                              }}
-                            >
-                              {r.label}:{" "}
-                            </span>
-                            <span
-                              style={{
-                                fontSize: 12.5,
-                                color: "var(--text)",
-                                lineHeight: 1.4
-                              }}
-                            >
-                              {(r.value as string).length > 110
-                                ? `${(r.value as string).slice(0, 110).trim()}…`
-                                : r.value}
-                            </span>
+                <div className="space-y-4">
+                  {/* Top Match gets Twin Radar */}
+                  <div className="rounded-2xl border border-[var(--border-bright)] overflow-hidden bg-[var(--panel-solid)] shadow-lg shadow-black/20">
+                    <TwinRadar match={ccOpportunities[0]} />
+                  </div>
+
+                  {/* Standard remaining opportunities */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {ccOpportunities.slice(1).map((o) => (
+                      <div key={o.id} className="rounded-2xl bg-[var(--panel-solid)] border border-[var(--border-bright)] p-5 hover:border-[var(--amber)] transition-colors flex flex-col gap-4">
+                        <div className="flex items-center gap-3">
+                          <Avatar id={o.id} name={o.name} avatarUrl={o.avatar} size={48} />
+                          <div className="min-w-0 flex-1">
+                            <div className="font-bold truncate text-[var(--text)] text-[15px] tracking-tight">{o.name}</div>
+                            <div className="text-xs font-semibold mt-0.5" style={{ color: o.tier.color }}>
+                              {o.score}% &middot; {o.tier.label}
+                            </div>
                           </div>
-                        ))}
-                      {!o.about && !o.wants && !o.offers && (
-                        <span style={{ fontSize: 12.5, color: "var(--text-dim)", fontStyle: "italic" }}>
-                          Twin still forming.
-                        </span>
-                      )}
-                    </div>
-                    <form action={startConversationWithUser}>
-                      <input type="hidden" name="userId" value={o.id} />
-                      <button
-                        type="submit"
-                        className="retro-btn retro-btn-primary"
-                        style={{
-                          width: "100%",
-                          fontSize: 13,
-                          padding: "9px 12px"
-                        }}
-                      >
-                        Connect →
+                        </div>
+
+                        <div className="flex flex-col gap-2 min-h-[4rem]">
+                          {([
+                            { label: "About", value: o.about },
+                            { label: "Wants", value: o.wants },
+                            { label: "Offers", value: o.offers }
+                          ] as { label: string; value: string | null }[])
+                            .filter((r) => r.value)
+                            .map((r) => (
+                              <div key={r.label} className="text-[13px]">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-dim)] mr-2">{r.label}:</span>
+                                <span className="text-[var(--text)] line-clamp-2 leading-relaxed opacity-90">
+                                  {r.value}
+                                </span>
+                              </div>
+                            ))}
+                          {!o.about && !o.wants && !o.offers && (
+                            <span className="text-sm text-[var(--text-dim)] italic">Twin still forming.</span>
+                          )}
+                        </div>
+                        
+                        <form action={startConversationWithUser} className="mt-auto pt-2">
+                          <input type="hidden" name="userId" value={o.id} />
+                          <button type="submit" className="w-full bg-[var(--panel-2)] hover:bg-[var(--border)] text-[var(--text)] border border-[var(--border-bright)] font-semibold py-2 rounded-xl text-sm transition-all shadow-sm">
+                            Connect &rarr;
+                          </button>
+                        </form>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Discover Search */}
+            <section>
+              <div className="mb-4">
+                <h2 className="text-xl font-bold tracking-tight">Explore Network</h2>
+                <p className="text-sm text-[var(--text-dim)]">Find people manually.</p>
+              </div>
+              <DiscoverSearch directory={directory} />
+            </section>
+
+          </div>
+
+          {/* SIDEBAR COLUMN (Right - Span 1) */}
+          <div className="xl:col-span-1 space-y-6">
+            
+            {!twinComplete && (
+              <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5 shadow-lg shadow-amber-500/5 backdrop-blur-md">
+                <div className="flex gap-3">
+                  <span className="text-amber-500 mt-0.5 leading-none text-xl">&bull;</span>
+                  <div>
+                    <h3 className="font-bold text-amber-500 tracking-tight">Incomplete Twin</h3>
+                    <p className="text-[13px] text-amber-500/80 mt-1 mb-4 leading-relaxed">
+                      Your twin lacks context and cannot effectively negotiate for you.
+                    </p>
+                    <Link href="/onboarding" className="inline-block bg-amber-500 text-black font-bold text-sm px-4 py-2 rounded-xl hover:bg-amber-400 transition-colors">
+                      Complete Setup
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="rounded-2xl border border-[var(--border-bright)] bg-[var(--panel-solid)] overflow-hidden shadow-xl shadow-black/20">
+              <PremiumProgressCard completedReferrals={completedReferrals} />
+            </div>
+
+            <div className="rounded-2xl border border-[var(--border-bright)] bg-[var(--panel-solid)] p-6 shadow-xl shadow-black/20">
+              <h3 className="font-bold tracking-tight mb-1 text-lg">Invite Network</h3>
+              <p className="text-[13px] text-[var(--text-dim)] mb-5">Bring your most valuable contacts into the ecosystem.</p>
+              <BulkReachToolkit appUrl={appUrl} variant="card" />
+            </div>
+
+            {twinComplete && (testPersonas?.length ?? 0) > 0 && (
+              <div className="rounded-2xl border border-[var(--border-bright)] bg-[var(--panel-solid)] p-6 shadow-xl shadow-black/20">
+                <h3 className="font-bold tracking-tight mb-1 text-lg">Test Sandbox</h3>
+                <p className="text-[13px] text-[var(--text-dim)] mb-5">
+                  Practice negotiating with AI personas before deploying your twin to real people.
+                </p>
+                <div className="space-y-2">
+                  {(testPersonas ?? []).map((p) => (
+                    <form action={startTestConversation} key={p.id}>
+                      <input type="hidden" name="personaId" value={p.id} />
+                      <button type="submit" className="w-full text-left bg-[var(--panel-2)] hover:bg-[var(--border)] border border-[var(--border-bright)] p-3.5 rounded-xl transition-all shadow-sm">
+                        <div className="font-semibold text-[14px]">{p.display_name ?? p.email}</div>
+                        <div className="text-[12px] text-[var(--text-dim)] mt-1 line-clamp-2 leading-relaxed">
+                          {personaGoal.get(p.id) || "AI persona"}
+                        </div>
                       </button>
                     </form>
+                  ))}
+                </div>
+                {testConversations.length > 0 && (
+                  <div className="mt-5 pt-5 border-t border-[var(--border-bright)] space-y-2">
+                    <h4 className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-dim)] mb-3">Resume Test</h4>
+                    {testConversations.map((c) => {
+                      const otherId = c.participant_a === user.id ? c.participant_b : c.participant_a;
+                      return (
+                        <Link key={c.id} href={`/conversations/${c.id}`} className="block text-[13px] text-indigo-400 hover:text-indigo-300 transition-colors font-medium">
+                          &rarr; {nameById.get(otherId) ?? "Unknown"}
+                        </Link>
+                      );
+                    })}
                   </div>
-                ))}
+                )}
               </div>
-            </div>
-          )}
-        </section>
+            )}
 
-        {!twinComplete && (
-          <div
-            className="mt-6 retro-panel p-4 text-sm"
-            style={{ borderColor: "var(--amber)" }}
-          >
-            <span className="retro-amber font-semibold">! </span>
-            Your twin is incomplete.{" "}
-            <Link href="/onboarding" className="retro-amber underline">
-              Finish onboarding
-            </Link>{" "}
-            so it has enough context to represent you.
+            <QuickFeedbackWidget surface="dashboard" />
           </div>
-        )}
 
-        {/* Single-column main content. The Clone Sync widget lives in
-            the sidebar column now (via AppShell's sidebarExtra slot),
-            so the right column is full-width. */}
-        <div className="mt-6">
-        {/* Hidden legacy left-rail block kept for layout-equiv. */}
-        <aside className="hidden" aria-hidden="true">
-          <SyncMeter
-            inputs={syncInputs}
-            size={150}
-            avatarUrl={(myProfile as any)?.avatar_url ?? null}
-            userId={user.id}
-          />
-          <Link
-            href="/onboarding"
-            className="retro-btn retro-btn-primary w-full text-center"
-          >
-            + add context
-          </Link>
-          <div
-            className="retro-dim text-xs text-center"
-            style={{ maxWidth: 240 }}
-          >
-            Sync your clone to{" "}
-            <span style={{ color: "var(--amber-bright)", fontWeight: 700 }}>
-              99%
-            </span>
-            . The last 1% is on purpose — a twin is never truly finished.
-          </div>
-        </aside>
-
-        {/* RIGHT — main content. Order per Jack: Your conversations
-            FIRST (the highest-value daily destination — these are the
-            real outcomes the user came back for), then DiscoverSearch
-            (Already on SyncedIn + Find people) below it. */}
-        <div className="space-y-8">
-
-          {/* Real conversations — handed off to a client component
-              that exposes a SYNC SCORE header, the (i) tooltip, the
-              filter dropdown (excitement / sync / recent active /
-              recent convo), and per-row SocialIconRow buttons. */}
-          {realConversations.length > 0 && (() => {
-            const rows: ConversationRow[] = realConversations.map((c) => {
-              const otherId =
-                c.participant_a === user.id
-                  ? c.participant_b
-                  : c.participant_a;
-              const otherTwin = (twinByUser.get(otherId) as any) ?? null;
-              const sync_score = computePairScore(twin ?? {}, otherTwin ?? {});
-              return {
-                id: c.id,
-                other_id: otherId,
-                other_name: nameById.get(otherId) ?? "Unknown",
-                other_avatar: avatarById.get(otherId) ?? null,
-                other_socials: socialsById.get(otherId) ?? null,
-                other_last_active_at: lastActiveById.get(otherId) ?? null,
-                status: statusForConv(c),
-                counterpart_summary: c.counterpart_summary ?? null,
-                summary: c.summary ?? null,
-                created_at: c.created_at,
-                excitement_score: c.excitement_score ?? null,
-                excitement_locked: c.excitement_locked ?? null,
-                sync_score,
-                sync_score_override: (c as any).sync_score_override ?? null,
-                last_message_at: lastMsgByConv.get(c.id) ?? null
-              };
-            });
-            return <ConversationsList rows={rows} />;
-          })()}
-
-          {/* Sample twins */}
-          {twinComplete && (testPersonas?.length ?? 0) > 0 && (
-        <section>
-          <div className="retro-label">test against a sample twin</div>
-          <p className="mt-1 retro-dim text-xs">
-            Pre-built twins that auto-reply. Stress-test yours before bringing
-            real people in.
-          </p>
-          <div className="mt-3 grid sm:grid-cols-2 gap-2">
-            {(testPersonas ?? []).map((p) => (
-              <form action={startTestConversation} key={p.id}>
-                <input type="hidden" name="personaId" value={p.id} />
-                <button
-                  type="submit"
-                  className="w-full text-left retro-panel retro-panel-hover p-3"
-                >
-                  <div className="font-semibold text-sm">
-                    {p.display_name ?? p.email}
-                  </div>
-                  <div className="retro-dim text-[11px] mt-1 line-clamp-2">
-                    {personaGoal.get(p.id) || ""}
-                  </div>
-                </button>
-              </form>
-            ))}
-          </div>
-          {testConversations.length > 0 && (
-            <div className="mt-2 space-y-1.5">
-              {testConversations.map((c) => {
-                const otherId =
-                  c.participant_a === user.id
-                    ? c.participant_b
-                    : c.participant_a;
-                return (
-                  <Link
-                    key={c.id}
-                    href={`/conversations/${c.id}`}
-                    className="block retro-panel retro-panel-hover px-3 py-2 text-xs"
-                  >
-                    <span className="retro-dim">resume: </span>
-                    {nameById.get(otherId) ?? "Unknown"}
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-        </section>
-      )}
-
-          {/* DiscoverSearch — Already on SyncedIn directory + Find
-              people twin-search. Lifted below the conversations list
-              so the user's existing relationships are the first thing
-              they see on the dashboard. */}
-          <DiscoverSearch directory={directory} />
-
-          {/* Premium-unlock progress — 3 completed referrals = Premium
-              free. completedReferrals computed up top so the build
-              doesn't trip on an async-IIFE-inside-JSX pattern. */}
-          <PremiumProgressCard
-            completedReferrals={completedReferrals}
-          />
-
-          {/* Invite */}
-          <section>
-            <BulkReachToolkit appUrl={appUrl} variant="card" />
-          </section>
-
-          {/* Always-visible feedback capture. Tag with surface so we know
-              this came from the main dashboard (vs. a mobile drawer or
-              the conversation page) when we read the feedback table. */}
-          <QuickFeedbackWidget surface="dashboard" />
         </div>
-        </div>
-      </>
+      </div>
     </AppShell>
   );
 }

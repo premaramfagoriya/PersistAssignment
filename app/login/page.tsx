@@ -115,185 +115,149 @@ export default async function LoginPage(props: {
   }
 
   return (
-    <main className="max-w-3xl mx-auto px-5 py-4 sm:py-6">
-      {/* Jack: 'make this element a bit more collapsed such that there's
-          no scrolling even possible on this page.' Top/bottom padding
-          shrunk, panel padding shrunk, headline shrunk, dividers thinner,
-          legal copy moved inline. Whole screen now fits in 100vh on
-          typical laptop heights (≥720px). */}
-      <Link href="/" className="retro-dim text-xs">
-        &lt; back
-      </Link>
-
-      <div className="mt-2 retro-panel retro-shadow p-4 sm:p-5">
-        {/* Compact header */}
-        <div className="flex flex-col items-center text-center">
+    <main className="min-h-screen w-full flex bg-[var(--bg)]">
+      {/* LEFT SIDE: Hero / Branding (Hidden on mobile) */}
+      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 bg-[#04050a] overflow-hidden border-r border-[var(--border)]">
+        {/* Background gradient effects */}
+        <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] bg-[radial-gradient(ellipse_at_top_left,rgba(99,102,241,0.15),transparent_50%)]" />
+        <div className="absolute bottom-0 right-0 w-[80%] h-[80%] bg-[radial-gradient(circle_at_bottom_right,rgba(139,92,246,0.15),transparent_50%)]" />
+        
+        <div className="relative z-10">
           <Wordmark size="lg" />
-          <h1
-            className="retro-h1 text-xl sm:text-2xl mt-2 leading-tight"
-            style={{ letterSpacing: "-0.02em" }}
-          >
-            Join the platform of the future
-          </h1>
-          <p
-            className="mt-1 text-xs sm:text-sm"
-            style={{ color: "var(--text-dim)" }}
-          >
-            Google sign-in is the fastest path — or use email + magic link.
-          </p>
+          <div className="mt-24">
+            <h1 className="text-4xl xl:text-5xl font-extrabold text-white leading-tight tracking-tight">
+              Scale your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">relationships</span>.
+              <br />
+              Automate your reach.
+            </h1>
+            <p className="mt-6 text-lg text-slate-400 max-w-md">
+              Deploy your AI twin to engage, negotiate, and qualify opportunities while you sleep.
+            </p>
+          </div>
         </div>
 
-        {/* Google FIRST — fastest path (Jack: "I like Google first"). Email +
-            password stay below as alternatives. */}
-        <div className="mt-3 space-y-2">
-          <OAuthButtons
-            invite={searchParams.invite}
-            conference={searchParams.conference}
-          />
-          {false && (
-            <>
-              <GoogleLogo />
-              <AppleLogo />
-            </>
+        <div className="relative z-10">
+          {faces.length > 0 && (
+            <div className="opacity-70 grayscale transition hover:grayscale-0 hover:opacity-100 duration-500">
+               <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">Join these founders</p>
+               <RealFacesStrip faces={faces} />
+            </div>
           )}
         </div>
-
-        <div className="my-3 flex items-center gap-3">
-          <div className="flex-1 h-px bg-[var(--border)]" />
-          <span className="retro-label">or use your email</span>
-          <div className="flex-1 h-px bg-[var(--border)]" />
-        </div>
-
-        {/* Magic link */}
-        <form className="space-y-2">
-          <input type="hidden" name="invite" value={searchParams.invite ?? ""} />
-          <input
-            type="hidden"
-            name="conference"
-            value={searchParams.conference ?? ""}
-          />
-          <input
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            placeholder="you@domain.com"
-            className="retro-input"
-          />
-          <button formAction={login} className="retro-btn w-full">
-            Email me a magic link
-          </button>
-        </form>
-
-        {sent && (
-          <p className="mt-3 text-sm retro-green text-center">
-            ✓ Check your inbox — the link works in any browser.
-          </p>
-        )}
-
-        {exists && (
-          <div
-            className="mt-3 p-3 retro-panel"
-            style={{ borderColor: "var(--amber)" }}
-          >
-            <p className="text-sm retro-amber font-semibold">
-              You already have an account
-            </p>
-            <p className="mt-1 text-xs retro-dim break-words">
-              We just emailed a sign-in link to that address — open it in any
-              browser to get straight in. Or sign in with your password below.
-            </p>
-          </div>
-        )}
-
-        <div className="my-3 flex items-center gap-3">
-          <div className="flex-1 h-px bg-[var(--border)]" />
-          <span className="retro-label">or password</span>
-          <div className="flex-1 h-px bg-[var(--border)]" />
-        </div>
-
-        {/* Email + password as the third option */}
-        <form className="space-y-2">
-          <input type="hidden" name="invite" value={searchParams.invite ?? ""} />
-          <input
-            type="hidden"
-            name="conference"
-            value={searchParams.conference ?? ""}
-          />
-          <input
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            placeholder="you@domain.com"
-            className="retro-input"
-          />
-          <input
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            placeholder="password (8+ characters)"
-            className="retro-input"
-          />
-          <div className="flex gap-2">
-            <button
-              formAction={signInWithPassword}
-              className="retro-btn flex-1"
-            >
-              Sign in
-            </button>
-            <button
-              formAction={signUpWithPassword}
-              className="retro-btn flex-1"
-            >
-              Create account
-            </button>
-          </div>
-        </form>
-
-        {searchParams.error && (
-          <div
-            className="mt-5 p-3 retro-panel"
-            style={{ borderColor: "var(--red)" }}
-          >
-            <p className="text-sm retro-red font-semibold">
-              ! Something went wrong
-            </p>
-            {detail && (
-              <p className="mt-1 text-xs retro-dim break-words">{detail}</p>
-            )}
-          </div>
-        )}
       </div>
 
-      {/* Compact legal/footer row inline so Privacy / Terms / Support /
-          Contact are visible without scrolling. Jack: 'right now I have
-          to scroll down to see privacy, terms, support, contact, but I
-          think we can just bring it all up.' */}
-      <div
-        className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px]"
-        style={{ color: "var(--text-dim)" }}
-      >
-        <Link href="/privacy" style={{ color: "inherit" }}>privacy</Link>
-        <span>·</span>
-        <Link href="/terms" style={{ color: "inherit" }}>terms</Link>
-        <span>·</span>
-        <Link href="/support" style={{ color: "inherit" }}>support</Link>
-        <span>·</span>
-        <a href="mailto:hi@syncedin.org" style={{ color: "inherit" }}>
-          contact
-        </a>
-      </div>
+      {/* RIGHT SIDE: Login Form */}
+      <div className="flex-1 flex flex-col justify-center px-6 sm:px-12 lg:px-24 xl:px-32 relative py-12">
+        <Link href="/" className="absolute top-8 left-6 sm:left-12 text-sm text-[var(--text-dim)] hover:text-[var(--amber-bright)] transition-colors flex items-center gap-1">
+          &larr; Back to site
+        </Link>
+        
+        <div className="w-full max-w-md mx-auto">
+          {/* Mobile wordmark */}
+          <div className="lg:hidden mb-8 flex justify-center">
+             <Wordmark size="lg" />
+          </div>
 
-      {/* Real-faces strip — moved here OUTSIDE the visible viewport (it
-          loads in below the fold for users who scroll). The fold-cleanup
-          requirement Jack flagged comes first; the faces strip is
-          reinforcement that only matters if the user scrolls. */}
-      {faces.length > 0 && (
-        <div style={{ marginTop: 16 }}>
-          <RealFacesStrip faces={faces} />
+          <div className="mb-10 text-center lg:text-left">
+            <h2 className="text-3xl font-bold text-[var(--text)] tracking-tight">Welcome back</h2>
+            <p className="mt-2 text-[var(--text-dim)]">Sign in to your Command Center.</p>
+          </div>
+
+          {/* Login Card */}
+          <div className="bg-[var(--panel-solid)] border border-[var(--border)] rounded-2xl p-6 sm:p-8 shadow-2xl shadow-indigo-500/5">
+             <OAuthButtons invite={searchParams.invite} conference={searchParams.conference} />
+
+             <div className="my-6 flex items-center gap-3">
+               <div className="flex-1 h-px bg-[var(--border)]" />
+               <span className="text-xs font-bold uppercase tracking-widest text-[var(--text-dim)]">or email</span>
+               <div className="flex-1 h-px bg-[var(--border)]" />
+             </div>
+
+             <form className="space-y-3">
+                <input type="hidden" name="invite" value={searchParams.invite ?? ""} />
+                <input type="hidden" name="conference" value={searchParams.conference ?? ""} />
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  placeholder="you@domain.com"
+                  className="w-full bg-[var(--bg)] border border-[var(--border-bright)] rounded-xl px-4 py-3 text-sm text-[var(--text)] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-[var(--text-dim)]"
+                />
+                <button formAction={login} className="w-full bg-[var(--panel-2)] hover:bg-[var(--border)] text-[var(--text)] font-semibold border border-[var(--border)] rounded-xl py-3 text-sm transition-all flex items-center justify-center gap-2">
+                  Email me a magic link
+                </button>
+             </form>
+
+             {sent && (
+               <p className="mt-4 text-sm text-green-400 font-medium text-center">
+                 ✓ Check your inbox — the link works in any browser.
+               </p>
+             )}
+
+             {exists && (
+               <div className="mt-4 p-4 rounded-xl border border-indigo-500/30 bg-indigo-500/5">
+                 <p className="text-sm text-indigo-400 font-semibold">Account exists</p>
+                 <p className="mt-1 text-xs text-[var(--text-dim)]">
+                   We just emailed a sign-in link to that address. Or sign in with your password below.
+                 </p>
+               </div>
+             )}
+
+             <div className="my-6 flex items-center gap-3">
+               <div className="flex-1 h-px bg-[var(--border)]" />
+               <span className="text-xs font-bold uppercase tracking-widest text-[var(--text-dim)]">password</span>
+               <div className="flex-1 h-px bg-[var(--border)]" />
+             </div>
+
+             <form className="space-y-3">
+               <input type="hidden" name="invite" value={searchParams.invite ?? ""} />
+               <input type="hidden" name="conference" value={searchParams.conference ?? ""} />
+               <input
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  placeholder="you@domain.com"
+                  className="w-full bg-[var(--bg)] border border-[var(--border-bright)] rounded-xl px-4 py-3 text-sm text-[var(--text)] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-[var(--text-dim)]"
+                />
+               <input
+                 name="password"
+                 type="password"
+                 autoComplete="current-password"
+                 placeholder="password (8+ characters)"
+                 className="w-full bg-[var(--bg)] border border-[var(--border-bright)] rounded-xl px-4 py-3 text-sm text-[var(--text)] outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder:text-[var(--text-dim)]"
+               />
+               <div className="flex gap-3 pt-2">
+                 <button formAction={signInWithPassword} className="flex-1 retro-btn-primary rounded-xl py-3 text-sm font-bold shadow-lg shadow-indigo-500/20">
+                   Sign in
+                 </button>
+                 <button formAction={signUpWithPassword} className="flex-1 bg-[var(--panel-2)] hover:bg-[var(--border)] text-[var(--text)] font-semibold border border-[var(--border)] rounded-xl py-3 text-sm transition-all">
+                   Create account
+                 </button>
+               </div>
+             </form>
+
+             {searchParams.error && (
+               <div className="mt-4 p-4 rounded-xl border border-red-500/30 bg-red-500/5">
+                 <p className="text-sm text-red-400 font-semibold">! Something went wrong</p>
+                 {detail && <p className="mt-1 text-xs text-[var(--text-dim)]">{detail}</p>}
+               </div>
+             )}
+          </div>
+
+          {/* Legal / Footer */}
+          <div className="mt-8 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-[var(--text-dim)]">
+             <Link href="/privacy" className="hover:text-[var(--text)] transition-colors">Privacy</Link>
+             <span>&middot;</span>
+             <Link href="/terms" className="hover:text-[var(--text)] transition-colors">Terms</Link>
+             <span>&middot;</span>
+             <Link href="/support" className="hover:text-[var(--text)] transition-colors">Support</Link>
+             <span>&middot;</span>
+             <a href="mailto:hi@syncedin.org" className="hover:text-[var(--text)] transition-colors">Contact</a>
+          </div>
         </div>
-      )}
+      </div>
     </main>
   );
 }

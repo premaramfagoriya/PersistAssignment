@@ -64,6 +64,7 @@ export function Sidebar({
     // with Edit twin / Settings / Sign out where infrequent actions go.
     // Route still exists at /continuation.
     { href: "/poll", label: "Poll", icon: "📊" },
+    { href: "/analytics", label: "Analytics", icon: "📈" },
     { href: "/personal-intelligence", label: "Personal intelligence", icon: "✨" },
     { href: "/feedback", label: "Feedback", icon: "💡" }
   ];
