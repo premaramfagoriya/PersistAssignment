@@ -186,251 +186,255 @@ export function LandingHandleHero({
         .lh-hero {
           max-width: 860px;
           margin: 0 auto;
-          /* Pull the hero up + give it room to breathe wide — Jack: "still
-             so much white space ... maximize that first landing view." */
           padding: 24px 24px 72px;
           color: var(--text);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
         }
+
         .lh-proof {
           display: inline-flex;
           align-items: center;
-          gap: 14px;
-          margin-bottom: 28px;
+          gap: 12px;
+          margin-bottom: 32px;
+          padding: 8px 16px 8px 8px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.1);
+          backdrop-filter: blur(12px);
+          box-shadow: 0 4px 24px -6px rgba(0,0,0,0.5);
         }
         .lh-avatars { display: inline-flex; }
         .lh-avatars img {
-          width: 36px; height: 36px; border-radius: 999px;
-          border: 2.5px solid var(--panel-solid);
+          width: 32px; height: 32px; border-radius: 999px;
+          border: 2px solid #04050a;
           object-fit: cover;
-          margin-left: -10px;
+          margin-left: -12px;
         }
         .lh-avatars img:first-child { margin-left: 0; }
         .lh-proof-text {
-          display: flex; flex-direction: column; gap: 2px;
+          font-size: 13px; font-weight: 600; color: #cbd5e1;
+          letter-spacing: -0.01em;
         }
-        .lh-proof-headline {
-          font-size: 16px; font-weight: 800; letter-spacing: -0.01em;
-        }
-        .lh-proof-sub {
-          display: inline-flex; align-items: center; gap: 8px;
-          font-size: 13px; color: var(--text-dim);
-        }
-        .lh-stars { color: #fbbf24; letter-spacing: 1px; font-size: 13px; }
+        .lh-proof-text strong { color: #fff; font-weight: 800; }
 
         .lh-h1 {
-          font-size: clamp(44px, 7vw, 78px);
+          font-size: clamp(44px, 7vw, 72px);
           font-weight: 900;
-          letter-spacing: -0.03em;
-          line-height: 1.0;
+          letter-spacing: -0.04em;
+          line-height: 1.05;
           margin: 0;
-          color: var(--text);
+          color: #fff;
         }
         .lh-sub {
-          margin-top: 22px;
-          font-size: 19px;
+          margin-top: 24px;
+          font-size: 20px;
           line-height: 1.5;
-          color: var(--text-dim);
-          max-width: 640px;
+          color: #94a3b8;
+          max-width: 680px;
         }
-        .lh-sub strong { color: var(--text); font-weight: 700; }
+
+        .lh-input-container {
+          width: 100%;
+          max-width: 580px;
+          margin-top: 48px;
+          padding: 8px;
+          border-radius: 24px;
+          background: rgba(10, 15, 30, 0.75);
+          border: 1px solid rgba(255,255,255,0.15);
+          backdrop-filter: blur(20px);
+          box-shadow: 0 20px 40px -10px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
 
         .lh-platforms {
           display: flex; flex-wrap: wrap; gap: 8px;
-          margin-top: 32px;
+          padding: 8px;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .lh-pill {
-          display: inline-flex; align-items: center; gap: 8px;
-          padding: 10px 16px;
+          display: inline-flex; align-items: center; gap: 6px;
+          padding: 8px 14px;
           border-radius: 999px;
           background: transparent;
-          border: 1px solid var(--border);
-          color: var(--text);
-          font-size: 14px;
+          border: 1px solid transparent;
+          color: #94a3b8;
+          font-size: 13px;
           font-weight: 600;
           cursor: pointer;
-          transition:
-            background 0.15s ease,
-            border-color 0.15s ease,
-            transform 0.12s ease;
+          transition: all 0.2s ease;
         }
-        .lh-pill:hover { border-color: var(--text); }
+        .lh-pill:hover { color: #fff; background: rgba(255,255,255,0.05); }
         .lh-pill.active {
-          background: var(--text);
-          color: var(--bg);
-          border-color: var(--text);
+          background: rgba(255,255,255,0.1);
+          color: #fff;
+          border-color: rgba(255,255,255,0.15);
+          box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
         .lh-input-wrap {
           position: relative;
-          margin-top: 14px;
+          padding: 12px;
         }
         .lh-input-prefix {
           position: absolute;
-          left: 18px;
+          left: 30px;
           top: 50%;
           transform: translateY(-50%);
-          color: var(--text-dim);
+          color: #64748b;
           font-size: 18px;
           pointer-events: none;
+          font-weight: 600;
         }
         .lh-input {
           width: 100%;
-          padding: 18px 18px 18px 38px;
-          font-size: 17px;
-          border-radius: 14px;
-          border: 1.5px solid var(--border);
-          background: transparent;
-          color: var(--text);
-          transition: border-color 0.15s ease, box-shadow 0.15s ease;
+          padding: 16px 20px 16px 42px;
+          font-size: 18px;
+          font-weight: 500;
+          border-radius: 12px;
+          border: 1px solid rgba(255,255,255,0.05);
+          background: rgba(0,0,0,0.2);
+          color: #fff;
+          transition: all 0.2s ease;
         }
         .lh-input:focus {
           outline: none;
-          border-color: #1f8bff;
-          box-shadow: 0 0 0 4px rgba(31, 139, 255, 0.14);
+          border-color: rgba(99,102,241,0.5);
+          background: rgba(0,0,0,0.4);
+          box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
         }
+        .lh-input::placeholder { color: #475569; }
 
         .lh-cta {
-          margin-top: 14px;
+          margin-top: 24px;
           width: 100%;
-          padding: 19px 22px;
-          font-size: 17px;
-          font-weight: 700;
-          letter-spacing: -0.005em;
+          max-width: 580px;
+          padding: 20px 24px;
+          font-size: 18px;
+          font-weight: 800;
+          letter-spacing: -0.01em;
           color: #fff;
-          background: #1f59ff;
-          border: none;
-          border-radius: 14px;
+          background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 20px;
           cursor: pointer;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 10px;
-          transition: transform 0.12s ease, box-shadow 0.18s ease;
-          box-shadow: 0 12px 30px -10px rgba(31, 89, 255, 0.55);
+          gap: 12px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 0 10px 30px -10px rgba(79, 70, 229, 0.6), inset 0 1px 0 rgba(255,255,255,0.3);
+          position: relative;
+          overflow: hidden;
+        }
+        .lh-cta::before {
+          content: '';
+          position: absolute;
+          top: 0; left: -100%; width: 100%; height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          transition: left 0.5s ease;
         }
         .lh-cta:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 16px 36px -10px rgba(31, 89, 255, 0.65);
+          transform: translateY(-2px) scale(1.01);
+          box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.8), inset 0 1px 0 rgba(255,255,255,0.4);
         }
+        .lh-cta:hover::before { left: 100%; }
         .lh-cta:disabled {
-          opacity: 0.55;
+          opacity: 0.6;
           cursor: not-allowed;
           transform: none;
         }
-        .lh-cta .arrow { transition: transform 0.15s ease; }
-        .lh-cta:hover .arrow { transform: translateX(3px); }
+        .lh-cta .arrow { transition: transform 0.2s ease; font-size: 20px; }
+        .lh-cta:hover .arrow { transform: translateX(4px); }
 
         .lh-microcopy {
-          margin-top: 14px;
-          font-size: 13px;
-          color: var(--text-dim);
-          text-align: center;
+          margin-top: 20px;
+          font-size: 14px;
+          color: #64748b;
+          font-weight: 500;
         }
 
         .lh-error {
-          margin-top: 10px;
-          font-size: 13px;
+          margin-top: 12px;
+          font-size: 14px;
           color: #ef4444;
-          text-align: center;
+          background: rgba(239, 68, 68, 0.1);
+          padding: 8px 16px;
+          border-radius: 8px;
+          border: 1px solid rgba(239, 68, 68, 0.2);
         }
       `}</style>
 
-      {/* Social proof — real platform users when we have them, dicebear
-          placeholders otherwise. The pile reads as authentic when these
-          are recognizable faces (founders, builders, advisors), so the
-          server-side fetch in app/page.tsx prioritizes most-active users
-          with uploaded avatars over the auto-generated identicons. */}
+      {/* Reintroduced highly-polished social proof */}
       <div className="lh-proof">
-        <div className="lh-avatars" aria-hidden="true">
-          {realFaces.length >= 3 ? (
-            // Top 3 real users, eagerly loaded so they render with the
-            // hero (no lazy flicker).
-            realFaces.slice(0, 3).map((f) => (
-              <img
-                key={f.id}
-                src={f.avatar_url}
-                alt={f.name}
-                title={f.name}
-                loading="eager"
-                referrerPolicy="no-referrer"
-              />
-            ))
-          ) : (
+        <div className="lh-avatars">
+          {realFaces.slice(0, 3).map((f) => (
+            <img key={f.id} src={f.avatar_url} alt="" />
+          ))}
+          {realFaces.length === 0 && (
             <>
-              <img
-                src="https://api.dicebear.com/9.x/notionists/svg?seed=marina"
-                alt=""
-              />
-              <img
-                src="https://api.dicebear.com/9.x/notionists/svg?seed=darius"
-                alt=""
-              />
-              <img
-                src="https://api.dicebear.com/9.x/notionists/svg?seed=ari"
-                alt=""
-              />
+              <img src="https://api.dicebear.com/9.x/notionists/svg?seed=Felix&backgroundColor=b6e3f4" alt="" />
+              <img src="https://api.dicebear.com/9.x/notionists/svg?seed=Anita&backgroundColor=c0aede" alt="" />
+              <img src="https://api.dicebear.com/9.x/notionists/svg?seed=Max&backgroundColor=ffd5dc" alt="" />
             </>
           )}
         </div>
         <div className="lh-proof-text">
-          <span className="lh-proof-headline">
-            40+ founders syncing
-          </span>
-          <span className="lh-proof-sub">
-            <span className="lh-stars">★★★★★</span>
-            <span>4.9 average</span>
-          </span>
+          Join <strong>40+ founders</strong> syncing deals.
         </div>
       </div>
 
       <h1 className="lh-h1">
-        Your twin already knows
-        <br />
-        the deal you should be making.
+        Your twin already knows <br />
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+          the deal you should make.
+        </span>
       </h1>
       <p className="lh-sub">
         Paste your handle. We build a digital twin of you in 30 seconds —
         then it talks to other people&apos;s twins to find the highest
-        win-win between you, before either of you spends a minute on
-        a call.
+        win-win between you, before you spend a minute on a call.
       </p>
 
-      {/* Platform pills */}
-      <div className="lh-platforms" role="tablist">
-        {PLATFORMS.map((p) => (
-          <button
-            key={p.key}
-            type="button"
-            role="tab"
-            aria-selected={platform.key === p.key}
-            onClick={() => setPlatform(p)}
-            className={`lh-pill ${platform.key === p.key ? "active" : ""}`}
-          >
-            <BrandLogo brand={p.key} size={14} />
-            <span>{p.label}</span>
-          </button>
-        ))}
-      </div>
+      {/* Glassmorphic Input Container */}
+      <div className="lh-input-container">
+        <div className="lh-platforms" role="tablist">
+          {PLATFORMS.map((p) => (
+            <button
+              key={p.key}
+              type="button"
+              role="tab"
+              aria-selected={platform.key === p.key}
+              onClick={() => setPlatform(p)}
+              className={`lh-pill ${platform.key === p.key ? "active" : ""}`}
+            >
+              <BrandLogo brand={p.key} size={14} />
+              <span>{p.label}</span>
+            </button>
+          ))}
+        </div>
 
-      <div className="lh-input-wrap">
-        <span className="lh-input-prefix">@</span>
-        <input
-          type="text"
-          value={handle}
-          onChange={(e) => setHandle(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              void go();
-            }
-          }}
-          placeholder={placeholder}
-          className="lh-input"
-          autoComplete="off"
-          autoCapitalize="off"
-          autoCorrect="off"
-          spellCheck={false}
-        />
+        <div className="lh-input-wrap">
+          <span className="lh-input-prefix">@</span>
+          <input
+            type="text"
+            value={handle}
+            onChange={(e) => setHandle(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                void go();
+              }
+            }}
+            placeholder={placeholder}
+            className="lh-input"
+            autoComplete="off"
+            autoCapitalize="off"
+            autoCorrect="off"
+            spellCheck={false}
+          />
+        </div>
       </div>
 
       <button
@@ -439,13 +443,12 @@ export function LandingHandleHero({
         disabled={!handle.trim() || busy}
         className="lh-cta"
       >
-        <span>{busy ? "building…" : "Build my twin"}</span>
+        <span>{busy ? "Building twin..." : "Build my twin"}</span>
         <span className="arrow" aria-hidden="true">→</span>
       </button>
 
       <p className="lh-microcopy">
-        Free. No commitment. Your twin learns your voice — you stay in
-        control of every message.
+        Free. No commitment. Your twin learns your voice.
       </p>
 
       {err && <p className="lh-error">{err}</p>}

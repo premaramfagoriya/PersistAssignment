@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AutoRedirect } from "./AutoRedirect";
 import { redirect } from "next/navigation";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { AppShell } from "../AppShell";
@@ -294,6 +295,7 @@ export default async function WelcomePage(
               refine my twin first
             </Link>
           </div>
+          <AutoRedirect to={ctaHref} delayMs={3000} />
         </div>
       </section>
     </AppShell>

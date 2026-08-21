@@ -20,6 +20,7 @@ import { QuickFeedbackWidget } from "./QuickFeedbackWidget";
 import { PremiumProgressCard } from "./PremiumProgressCard";
 import { TwinRadar } from "./TwinRadar";
 import { ConversationsList, type ConversationRow } from "./ConversationsList";
+import { SocialIconRow } from "../SocialIconRow";
 import { countCompletedReferrals } from "@/lib/invite-stats";
 import { computeSyncScore } from "@/lib/sync-score";
 
@@ -565,6 +566,7 @@ export default async function DashboardPage() {
           id: c.id as string,
           name: (nameById.get(otherId) as string) ?? "Someone",
           avatar: (avatarById.get(otherId) as string | null) ?? null,
+          socials: (socialsById.get(otherId) as any) ?? null,
           sync: computePairScore(twin ?? {}, ot ?? {}),
           summary: (c.summary as string | null) ?? null
         };
@@ -694,8 +696,9 @@ export default async function DashboardPage() {
                   className="group flex flex-col sm:flex-row gap-6 items-center p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-[var(--panel-solid)] border border-indigo-500/30 hover:border-indigo-400 transition-all shadow-xl shadow-indigo-500/5"
                 >
                   <div className="flex-1 min-w-0">
-                    <div className="text-xl sm:text-2xl font-bold tracking-tight mb-2 group-hover:text-indigo-400 transition-colors">
+                    <div className="text-xl sm:text-2xl font-bold tracking-tight mb-2 group-hover:text-indigo-400 transition-colors flex items-center gap-3">
                       {ccTop.name}
+                      <SocialIconRow urls={ccTop.socials} size={18} />
                     </div>
                     <div className="text-sm text-slate-300 leading-relaxed line-clamp-3">
                       {ccTop.summary || "Your twin flagged this as your highest-leverage conversation. Open it and lock the next step."}

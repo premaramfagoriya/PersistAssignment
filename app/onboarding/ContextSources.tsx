@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DotsLoader } from "../DotsLoader";
 
 export type Snippet = {
@@ -97,6 +97,26 @@ export function ContextSources({
       return next;
     });
   }
+
+  // Auto-ingest signup intent from Landing page
+  useEffect(() => {
+    try {
+      const intent = sessionStorage.getItem("syncedin.signupIntent");
+      if (intent) {
+        sessionStorage.removeItem("syncedin.signupIntent");
+        const { profile_url, platform } = JSON.parse(intent);
+        if (profile_url) {
+          setActive(platform || "linkedin");
+          setInput(profile_url);
+          // Small delay to let React flush state before auto-submitting
+          setTimeout(() => {
+            const btn = document.getElementById("auto-submit-context");
+            if (btn) btn.click();
+          }, 100);
+        }
+      }
+    } catch {}
+  }, []);
 
   const current = QUICK_TYPES.find((t) => t.key === active) ?? QUICK_TYPES[0];
   // Note textarea is ONLY meaningful for "Any URL" — for LinkedIn / X /
@@ -237,6 +257,7 @@ export function ContextSources({
           className="retro-input flex-1"
         />
         <button
+          id="auto-submit-context"
           type="button"
           onClick={submitUrl}
           disabled={loading || !input.trim()}

@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 type Theme = "dark" | "light";
 
 export function ThemeToggle() {
-  // Default to light mode unless the user has explicitly chosen dark.
-  const [theme, setTheme] = useState<Theme>("light");
+  // Default to dark mode for the cassette futurism aesthetic.
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
     const saved =
       (document.documentElement.dataset.theme as Theme) ||
       (localStorage.getItem("syncedin-theme") as Theme) ||
-      "light";
+      "dark";
     setTheme(saved);
     document.documentElement.dataset.theme = saved;
   }, []);

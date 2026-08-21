@@ -17,7 +17,8 @@ const HIDE_ON: Array<string | RegExp> = [
   // (build SHA, marketing links) — wrong surface for a chat experience.
   /^\/talk(?:\/|$)/,
   /^\/twin(?:\/|$)/,
-  /^\/chat(?:\/|$)/
+  /^\/chat(?:\/|$)/,
+  /^\/$/ // Hide on the landing page (which has its own full-bleed design and footer)
 ];
 
 function shouldHide(path: string): boolean {
